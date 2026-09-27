@@ -1,0 +1,2126 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Registro Incidencias</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F1F5F6;
+  --surface:#FFFFFF;
+  --surface-2:#E7EEF0;
+  --border:#D7E0E3;
+  --text:#152227;
+  --text-2:#57696F;
+  --accent:#146B64;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#E1F1EE;
+  --channel:#4A55C9;
+  --channel-soft:#E7E9FA;
+  --ticket:#8A4B9C;
+  --ticket-soft:#F0E4F5;
+  --warn:#9C5B12;
+  --warn-soft:#FBEEDC;
+  --danger:#A23B3B;
+  --danger-soft:#F7E3E3;
+  --focus:#146B64;
+  --shadow: 0 1px 2px rgba(20,40,45,.06), 0 6px 16px rgba(20,40,45,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1417;
+    --surface:#161F23;
+    --surface-2:#1C2629;
+    --border:#2B3639;
+    --text:#E8EFF0;
+    --text-2:#9AACB1;
+    --accent:#42BDB1;
+    --accent-ink:#07211E;
+    --accent-soft:#183531;
+    --channel:#8D98F6;
+    --channel-soft:#22285A;
+    --ticket:#C79BDA;
+    --ticket-soft:#332040;
+    --warn:#E1A75B;
+    --warn-soft:#3A2C15;
+    --danger:#E08484;
+    --danger-soft:#3A1F1F;
+    --focus:#42BDB1;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1417;
+  --surface:#161F23;
+  --surface-2:#1C2629;
+  --border:#2B3639;
+  --text:#E8EFF0;
+  --text-2:#9AACB1;
+  --accent:#42BDB1;
+  --accent-ink:#07211E;
+  --accent-soft:#183531;
+  --channel:#8D98F6;
+  --channel-soft:#22285A;
+  --ticket:#C79BDA;
+  --ticket-soft:#332040;
+  --warn:#E1A75B;
+  --warn-soft:#3A2C15;
+  --danger:#E08484;
+  --danger-soft:#3A1F1F;
+  --focus:#42BDB1;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding-inline:16px;
+  padding-block:0 28px;
+}
+.mono{font-family:"IBM Plex Mono", "SFMono-Regular", Consolas, monospace;}
+
+.topbar{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:20;
+  margin-inline:-16px;
+  padding:14px 16px;
+  padding-top:calc(14px + env(safe-area-inset-top,0px));
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.brand{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+.brand h1{font-size:17px; font-weight:700; margin:0; letter-spacing:-.01em;}
+.brand .tag{font-size:12px; color:var(--text-2); font-weight:500;}
+.case-badge{
+  display:flex; align-items:center; gap:8px;
+  background:var(--surface); border:1px solid var(--border); border-radius:999px;
+  padding:6px 12px; box-shadow:var(--shadow); font-size:13px;
+}
+.case-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--text-2); flex:none;}
+.case-badge.active .dot{background:var(--accent);}
+.case-badge b{font-family:"IBM Plex Mono",monospace; font-weight:600;}
+
+main{max-width:720px; margin:0 auto; padding-top:20px; display:flex; flex-direction:column; gap:18px;}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.card + .card{margin-top:0;}
+.step-head{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+.step-num{
+  flex:none; width:26px; height:26px; border-radius:50%;
+  background:var(--accent-soft); color:var(--accent);
+  font-weight:700; font-size:13px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono",monospace;
+}
+.step-head h2{font-size:15px; margin:0; font-weight:600;}
+.step-head p{margin:2px 0 0; font-size:12.5px; color:var(--text-2);}
+
+label{display:block; font-size:12.5px; font-weight:600; color:var(--text-2); margin-bottom:5px; letter-spacing:.01em;}
+textarea, input[type=text], input[type=date], input[type=number]{
+  width:100%;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:9px 11px;
+  font-size:13.5px;
+  color:var(--text);
+  font-family:inherit;
+}
+textarea:focus, input:focus{outline:2px solid var(--focus); outline-offset:1px;}
+textarea{resize:vertical; min-height:76px; line-height:1.45;}
+.field{margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+@media (max-width:480px){.grid2{grid-template-columns:1fr;}}
+
+.row-inline{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;}
+.row-inline > *{flex:1; min-width:150px;}
+
+.btn{
+  appearance:none; border:none; cursor:pointer;
+  font-family:inherit; font-size:13.5px; font-weight:600;
+  padding:9px 14px; border-radius:9px;
+  display:inline-flex; align-items:center; gap:7px;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.06);}
+.btn:active{filter:brightness(0.94);}
+.btn-primary{background:var(--accent); color:var(--accent-ink);}
+.btn-ghost{background:var(--surface-2); color:var(--text); border:1px solid var(--border);}
+.btn-sm{padding:6px 10px; font-size:12.5px; border-radius:7px;}
+.btn[disabled]{opacity:.45; cursor:not-allowed;}
+
+.detect-box{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  background:var(--surface-2); border:1px dashed var(--border);
+  border-radius:10px; padding:10px 12px; margin-top:10px;
+}
+.detect-box .label{font-size:12px; color:var(--text-2); font-weight:600;}
+.code-chip{
+  font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:14px;
+  background:var(--accent-soft); color:var(--accent);
+  border:1px solid var(--accent); border-radius:7px; padding:3px 9px;
+  cursor:pointer;
+}
+.code-chip.selected{background:var(--accent); color:var(--accent-ink);}
+.hint{font-size:12px; color:var(--text-2); margin-top:6px;}
+.link{color:var(--accent); text-decoration:underline; font-weight:600;}
+
+.channel-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--channel-soft); color:var(--channel);
+  border-radius:999px; padding:5px 12px; font-size:12.5px; font-weight:700;
+}
+.channel-badge.ticket{background:var(--ticket-soft); color:var(--ticket);}
+.channel-badge svg{width:13px; height:13px;}
+
+.warn-box{
+  display:flex; gap:8px; align-items:flex-start;
+  background:var(--warn-soft); color:var(--warn);
+  border-radius:9px; padding:8px 10px; font-size:12.5px; margin-top:8px;
+  line-height:1.4;
+}
+.warn-box.danger{background:var(--danger-soft); color:var(--danger);}
+.warn-box.muted{background:var(--surface-2); color:var(--text-2);}
+.warn-box b{font-family:"IBM Plex Mono",monospace;}
+
+.dup-status-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.dup-status-row p{margin:0;}
+.dup-status-row .btn{margin-left:auto;}
+.dup-import{margin-top:12px; padding-top:12px; border-top:1px dashed var(--border);}
+.case-dup-note{margin-top:8px;}
+.case-dup-note[hidden]{display:none!important;}
+
+.result-card{
+  border:1.5px solid var(--accent);
+  background:var(--surface);
+}
+.result-head{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+.result-head h2{font-size:15px; margin:0; font-weight:700;}
+.result-actions{display:flex; gap:8px; flex-wrap:wrap;}
+.output{
+  width:100%; min-height:80px; resize:vertical;
+  background:var(--surface-2); border:1px solid var(--border); border-radius:9px;
+  padding:10px 11px; font-family:"IBM Plex Mono",monospace; font-size:12px; line-height:1.5;
+  color:var(--text);
+}
+.copied-tag{font-size:12px; color:var(--accent); font-weight:600; opacity:0; transition:opacity .2s;}
+.copied-tag.show{opacity:1;}
+
+.footer-actions{display:flex; justify-content:space-between; align-items:center; padding:4px 4px 18px;}
+.footer-actions .btn-ghost{font-size:12.5px;}
+
+fieldset{border:none; padding:0; margin:0;}
+.small-note{font-size:11.5px; color:var(--text-2); margin-top:2px;}
+
+.mode-switch{
+  display:flex; gap:4px; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:10px; padding:3px; margin:14px auto 0; width:fit-content;
+}
+.mode-switch button{
+  appearance:none; border:none; background:transparent; cursor:pointer;
+  font-family:inherit; font-size:13px; font-weight:600; color:var(--text-2);
+  padding:7px 16px; border-radius:8px;
+}
+.mode-switch button.active{background:var(--surface); color:var(--accent); box-shadow:var(--shadow);}
+
+.lote-intro{font-size:12.5px; color:var(--text-2); line-height:1.5;}
+.case-card{
+  border:1px solid var(--border); border-radius:12px; padding:14px; background:var(--surface-2);
+  margin-top:10px;
+}
+.case-card.review{border-color:var(--warn);}
+.case-card-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+.case-card-head input[type=checkbox]{width:16px; height:16px; flex:none;}
+.case-code-input{
+  width:110px; font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:13px;
+  background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:5px 8px;
+}
+.case-date-input{
+  width:132px; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:5px 8px; font-size:13px; font-family:inherit;
+}
+.status-chip{font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:auto;}
+.status-chip.ok{background:var(--accent-soft); color:var(--accent);}
+.status-chip.pending{background:var(--surface); color:var(--text-2); border:1px solid var(--border);}
+.status-chip.review{background:var(--warn-soft); color:var(--warn);}
+.case-body-grid{display:flex; flex-direction:column; gap:8px;}
+.case-body-grid textarea{min-height:58px; font-size:12.5px;}
+.case-flag-note{font-size:11.5px; color:var(--warn); margin-top:4px; line-height:1.4;}
+.case-flag-note button{background:none; border:none; color:var(--warn); text-decoration:underline; cursor:pointer; font-size:11.5px; font-family:inherit; padding:0;}
+.case-ops-toggle{font-size:12px; color:var(--accent); cursor:pointer; font-weight:600; margin-top:6px; background:none; border:none; padding:0; font-family:inherit;}
+.case-ops-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px;}
+.case-ops-grid input{font-size:12px; padding:6px 8px;}
+.case-ops-grid label{font-size:10.5px; margin-bottom:3px;}
+@media (max-width:480px){.case-ops-grid{grid-template-columns:1fr 1fr;}}
+.codes-box{
+  background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:10px 12px;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; white-space:pre-wrap; max-height:140px; overflow:auto;
+}
+.summary-row{display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; color:var(--text-2); margin-top:10px;}
+.summary-row b{color:var(--text); font-family:"IBM Plex Mono",monospace;}
+</style>
+
+<div class="topbar">
+  <div class="brand">
+    <h1>Registro Incidencias</h1>
+    <span class="tag">Directo · Calidad</span>
+  </div>
+  <div class="case-badge" id="caseBadge">
+    <span class="dot"></span>
+    <span id="caseBadgeText">Sin caso activo</span>
+  </div>
+</div>
+
+<div class="mode-switch" role="tablist">
+  <button type="button" class="active" id="tabSingleBtn">Un caso</button>
+  <button type="button" id="tabLoteBtn">Lote</button>
+  <button type="button" id="tabTicketBtn">Ticket</button>
+  <button type="button" id="tabTicketLoteBtn">Tickets (lote)</button>
+</div>
+
+<main>
+
+<div class="card" id="dupCard">
+  <div class="dup-status-row">
+    <div class="step-num" style="flex:none;">⟳</div>
+    <div style="flex:1; min-width:180px;">
+      <h2 style="font-size:14.5px; margin:0 0 2px; font-weight:600;">Base de duplicados</h2>
+      <p class="small-note" id="dupStatus">Conectando con la base…</p>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="dupToggleBtn" type="button">Actualizar base ▾</button>
+  </div>
+  <div class="dup-import" id="dupImportBox" hidden>
+    <p class="hint">Esta herramienta avisa cuando un IdServicio ya fue registrado antes (mismo canal = posible carga duplicada por error; otro canal = posible reclamo duplicado entre Notificación App y Ticket). Para que funcione con tu historial, selecciona toda la tabla <b class="mono">Data</b> de tu BD (encabezados incluidos), cópiala y pégala aquí. Solo se guarda IdServicio + Canal + N° Ticket + Fecha — nunca nombres ni descripciones.</p>
+    <div class="field">
+      <textarea id="dupImportPaste" style="min-height:90px;" placeholder="Pega aquí la tabla Data completa (con la fila de encabezados)"></textarea>
+    </div>
+    <button class="btn btn-primary btn-sm" id="dupImportBtn" type="button">Importar / actualizar base</button>
+    <p class="hint" id="dupImportResult"></p>
+  </div>
+</div>
+
+<div id="modeSingle">
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Pega el texto del reclamo</h2>
+        <p>Tal como llega la notificación de Notificación App, sin editar.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="reclamoText">Texto del reclamo</label>
+      <textarea id="reclamoText" placeholder="¡Hola! hemos recibido tu mensaje sobre el servicio 5866354, nos pondremos en contacto contigo lo antes posible.
+Detalle: me indica el usuario que cancelo el servicio jamás lo trasladó..."></textarea>
+    </div>
+    <div class="detect-box" id="detectBox" hidden>
+      <span class="label">IdServicio detectado</span>
+      <div id="codeChips"></div>
+      <button class="btn btn-ghost btn-sm" id="copyCodeBtn" type="button">Copiar código</button>
+    </div>
+    <p class="hint" id="noCodeHint" hidden>No se detectó un número de servicio claro — revisa el texto o escribe el IdServicio manualmente en el paso 2.</p>
+    <div class="warn-box" id="dupWarnSingle" hidden></div>
+  </div>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div>
+        <h2>Cruza el código en el normalizador</h2>
+        <p>Pega el código arriba en <a class="link" href="https://directo-central.github.io/normalizador_calidad/" target="_blank" rel="noopener">normalizador_calidad</a> (campo 2), genera la salida y pégala aquí.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="normPaste">Fila generada por el normalizador</label>
+      <textarea id="normPaste" placeholder="Pega aquí la fila completa (se reconoce separada por tabs o por líneas)"></textarea>
+    </div>
+    <p class="hint">Se completan los 12 campos de abajo automáticamente — puedes corregir cualquier casilla a mano.</p>
+
+    <div class="grid2" style="margin-top:12px;">
+      <div class="field"><label for="f_fecha">Fecha de la incidencia</label><input type="text" id="f_fecha" placeholder="dd/mm/aaaa"></div>
+      <div class="field"><label for="f_unidad">Unidad de Negocio</label><input type="text" id="f_unidad" list="dl_unidad"></div>
+      <div class="field"><label for="f_hora">Hora del Servicio</label><input type="text" id="f_hora" placeholder="hh:mm"></div>
+      <div class="field"><label for="f_modo">Modo de Reserva</label><input type="text" id="f_modo" list="dl_modo"></div>
+      <div class="field"><label for="f_tipopet">Tipo de Petición</label><input type="text" id="f_tipopet" list="dl_tipopet"></div>
+      <div class="field"><label for="f_idservicio">IdServicio</label><input type="text" class="mono" id="f_idservicio"></div>
+      <div class="field"><label for="f_tipocli">Tipo Cliente</label><input type="text" id="f_tipocli" list="dl_tipocli"></div>
+      <div class="field"><label for="f_usuario">Nombre del usuario afectado</label><input type="text" id="f_usuario"></div>
+      <div class="field"><label for="f_empresa">Nombre de la empresa afectada</label><input type="text" id="f_empresa" list="dl_empresa"></div>
+      <div class="field"><label for="f_flota">Flota</label><input type="text" id="f_flota" list="dl_flota"></div>
+      <div class="field"><label for="f_movil">N° Móvil</label><input type="text" id="f_movil"></div>
+      <div class="field"><label for="f_conductor">Nombre del Conductor</label><input type="text" id="f_conductor"></div>
+    </div>
+    <div class="warn-box" id="empresaWarn" hidden>
+      ⚠ Ese nombre de empresa no coincide exactamente con la lista de Parámetros. La columna "Ejecutivo" (VLOOKUP) puede salir en blanco. Revisa la ortografía o elige una opción de la lista.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Completa el cierre del caso</h2>
+        <p>Canal, quién atiende, fecha de recepción y la respuesta enviada al cliente.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Canal de comunicación</label>
+      <span class="channel-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+        Notificación App
+      </span>
+    </div>
+
+    <div class="row-inline">
+      <div class="field">
+        <label for="f_atendido">Atendido por</label>
+        <input type="text" id="f_atendido" list="dl_atendido" value="Melisa">
+      </div>
+      <div class="field">
+        <label for="f_fecharecibo">Fecha en que recibo la incidencia</label>
+        <input type="date" id="f_fecharecibo">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f_descripcion">Descripción inicial de la incidencia (descargo usuario afectado)</label>
+      <textarea id="f_descripcion" placeholder="Se llena solo con el texto del paso 1 — puedes ajustarlo aquí."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="f_accion">Acción correctiva de cara al Cliente</label>
+      <textarea id="f_accion" placeholder="Pega aquí el correo/respuesta enviada al cliente"></textarea>
+    </div>
+  </div>
+
+  <div class="card result-card">
+    <div class="result-head">
+      <h2>Fila lista para pegar en la BD</h2>
+      <div class="result-actions">
+        <span class="copied-tag" id="copiedTag">Copiado ✓</span>
+        <button class="btn btn-primary btn-sm" id="copyRowBtn" type="button">Copiar fila</button>
+      </div>
+    </div>
+    <textarea class="output" id="outputRow" readonly></textarea>
+    <p class="small-note">Pega esta fila empezando en la columna A, en la primera fila vacía justo debajo de la última fila de la tabla "Data" — Excel extiende la tabla solo y las columnas calculadas (Mes, Semana, Días de respuesta, Columna1/Ejecutivo) se completan solas. Las columnas de investigación (Área responsable, Tipo de Incidencia, Severidad, Causa, etc.) quedan en blanco para que Calidad las complete después. Si ves comillas alrededor de la descripción o la acción correctiva, es normal: así Excel entiende que ese texto con saltos de línea va en una sola celda, en vez de partirse en varias filas.</p>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn btn-ghost" id="resetBtn" type="button">Nuevo caso</button>
+    <span class="small-note" id="stepStatus"></span>
+  </div>
+
+</div>
+
+<div id="modeLote" hidden>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Pega el correo completo de varios casos</h2>
+        <p class="lote-intro">Copia y pega el texto de tu correo o del PDF exportado (con los encabezados De: / Enviado el: / Para: / Asunto: de cada mensaje). Detecta cada caso por su código de servicio y separa notificación original de respuesta al cliente.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="loteFileInput">Adjunta el PDF exportado del correo (o pega el texto abajo)</label>
+      <input type="file" id="loteFileInput" accept="application/pdf,.pdf">
+      <p class="hint" id="lotePdfStatus"></p>
+    </div>
+    <div class="field">
+      <label for="loteText">Texto completo (varios correos)</label>
+      <textarea id="loteText" style="min-height:130px;" placeholder="calidad@directoapp.pe
+De: Directo App <no-reply@directoapp.pe>
+Enviado el: lunes, 7 de setiembre de 2026 07:31
+Para: cliente@empresa.com
+CC: calidad@directoapp.pe
+Asunto: Reclamo servicio App (5858971)
+¡Hola! hemos recibido tu mensaje sobre el servicio 5858971...
+(pega aquí todo el bloque, puede incluir muchos correos seguidos)"></textarea>
+    </div>
+    <button class="btn btn-primary" id="analizarLoteBtn" type="button">Analizar y separar casos</button>
+    <div class="summary-row" id="loteSummary" hidden></div>
+  </div>
+
+  <div class="card" id="loteAtendidoCard" hidden>
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div>
+        <h2>Revisa cada caso</h2>
+        <p class="lote-intro">Ajusta lo que haga falta. Los casos marcados "revisar" tienen más de una respuesta posible o mencionan otro código — verifícalos antes de incluirlos.</p>
+      </div>
+    </div>
+    <div class="row-inline">
+      <div class="field">
+        <label for="lote_atendido">Atendido por (aplica a todo el lote)</label>
+        <input type="text" id="lote_atendido" list="dl_atendido" value="Melisa">
+      </div>
+      <div class="field">
+        <label>Canal de comunicación</label>
+        <span class="channel-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+          Notificación App
+        </span>
+      </div>
+    </div>
+    <div id="loteCasesList"></div>
+  </div>
+
+  <div class="card" id="loteCrossCard" hidden>
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Cruza todos los códigos en el normalizador</h2>
+        <p class="lote-intro">Copia estos códigos (uno por línea) y pégalos todos juntos en el campo 2 del <a class="link" href="https://directo-central.github.io/normalizador_calidad/" target="_blank" rel="noopener">normalizador_calidad</a>. Genera la salida y pega abajo TODAS las filas que te devuelva, una por línea.</p>
+      </div>
+    </div>
+    <div class="codes-box" id="codesBox"></div>
+    <button class="btn btn-ghost btn-sm" id="copyCodesBtn" type="button" style="margin-top:8px;">Copiar códigos</button>
+    <div class="field" style="margin-top:12px;">
+      <label for="loteNormPaste">Filas generadas por el normalizador (todas juntas)</label>
+      <textarea id="loteNormPaste" style="min-height:90px;" placeholder="Pega aquí todas las filas que generó el normalizador para estos códigos"></textarea>
+    </div>
+    <p class="hint" id="loteNormHint"></p>
+  </div>
+
+  <div class="card result-card" id="loteResultCard" hidden>
+    <div class="result-head">
+      <h2>Bloque de filas listo para pegar</h2>
+      <div class="result-actions">
+        <span class="copied-tag" id="loteCopiedTag">Copiado ✓</span>
+        <button class="btn btn-primary btn-sm" id="generarLoteBtn" type="button">Generar bloque</button>
+        <button class="btn btn-ghost btn-sm" id="copyLoteBtn" type="button">Copiar bloque</button>
+      </div>
+    </div>
+    <textarea class="output" id="loteOutput" readonly style="min-height:140px;"></textarea>
+    <p class="small-note">Pega todo el bloque de una sola vez, empezando en la columna A de la primera fila vacía debajo de la tabla "Data" — cada línea es un caso nuevo. Solo se incluyen los casos con la casilla marcada arriba.</p>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn btn-ghost" id="resetLoteBtn" type="button">Nuevo lote</button>
+    <span class="small-note"></span>
+  </div>
+
+</div>
+
+<div id="modeTicket" hidden>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Pega los datos del ticket (Cereza)</h2>
+        <p>Selecciona la fila del ticket en <a class="link" href="https://directo.cerezacc.pe/dashboard/tickets" target="_blank" rel="noopener">directo.cerezacc.pe/dashboard/tickets</a> (Fecha de creación, Número, Asunto, Descripción — con o sin encabezados) y pégala abajo: rellena los 4 campos sola.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="t_pasteRow">Pega aquí la fila del ticket</label>
+      <textarea id="t_pasteRow" style="min-height:50px;" placeholder="Pega la fila copiada de la tabla de Cereza — si pegas varias filas a la vez, cambia sola al modo &quot;Tickets (lote)&quot;"></textarea>
+      <p class="hint" id="t_pasteStatus"></p>
+    </div>
+    <p class="hint">¿No quieres pegar la fila? Completa los 4 campos a mano:</p>
+    <div class="row-inline">
+      <div class="field">
+        <label for="t_numticket">N° Ticket</label>
+        <input type="text" id="t_numticket" class="mono" placeholder="1467">
+      </div>
+      <div class="field">
+        <label for="t_fechacreacion">Fecha de creación del ticket</label>
+        <input type="date" id="t_fechacreacion">
+      </div>
+    </div>
+    <div class="field">
+      <label for="t_asunto">Asunto del ticket</label>
+      <input type="text" id="t_asunto" placeholder="5866245 - consulta pax">
+    </div>
+    <div class="field">
+      <label for="t_descripcion">Descripción del ticket</label>
+      <textarea id="t_descripcion" placeholder="cliente solicita apoyo con lo siguiente: Tengo facturas emitidas pero las placas..."></textarea>
+    </div>
+    <div class="detect-box" id="detectBoxT" hidden>
+      <span class="label">IdServicio detectado</span>
+      <div id="codeChipsT"></div>
+      <button class="btn btn-ghost btn-sm" id="copyCodeBtnT" type="button">Copiar código</button>
+    </div>
+    <p class="hint" id="noCodeHintT" hidden>No se detectó un número de servicio claro en el Asunto/Descripción — escribe el IdServicio manualmente en el paso 2.</p>
+    <div class="warn-box" id="dupWarnTicket" hidden></div>
+  </div>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div>
+        <h2>Cruza el código en el normalizador</h2>
+        <p>Pega el código arriba en <a class="link" href="https://directo-central.github.io/normalizador_calidad/" target="_blank" rel="noopener">normalizador_calidad</a> (campo 2), genera la salida y pégala aquí.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="normPasteT">Fila generada por el normalizador</label>
+      <textarea id="normPasteT" placeholder="Pega aquí la fila completa (se reconoce separada por tabs o por líneas)"></textarea>
+    </div>
+    <p class="hint">Se completan los 12 campos de abajo automáticamente — puedes corregir cualquier casilla a mano.</p>
+
+    <div class="grid2" style="margin-top:12px;">
+      <div class="field"><label for="ft_fecha">Fecha de la incidencia</label><input type="text" id="ft_fecha" placeholder="dd/mm/aaaa"></div>
+      <div class="field"><label for="ft_unidad">Unidad de Negocio</label><input type="text" id="ft_unidad" list="dl_unidad"></div>
+      <div class="field"><label for="ft_hora">Hora del Servicio</label><input type="text" id="ft_hora" placeholder="hh:mm"></div>
+      <div class="field"><label for="ft_modo">Modo de Reserva</label><input type="text" id="ft_modo" list="dl_modo"></div>
+      <div class="field"><label for="ft_tipopet">Tipo de Petición</label><input type="text" id="ft_tipopet" list="dl_tipopet"></div>
+      <div class="field"><label for="ft_idservicio">IdServicio</label><input type="text" class="mono" id="ft_idservicio"></div>
+      <div class="field"><label for="ft_tipocli">Tipo Cliente</label><input type="text" id="ft_tipocli" list="dl_tipocli"></div>
+      <div class="field"><label for="ft_usuario">Nombre del usuario afectado</label><input type="text" id="ft_usuario"></div>
+      <div class="field"><label for="ft_empresa">Nombre de la empresa afectada</label><input type="text" id="ft_empresa" list="dl_empresa"></div>
+      <div class="field"><label for="ft_flota">Flota</label><input type="text" id="ft_flota" list="dl_flota"></div>
+      <div class="field"><label for="ft_movil">N° Móvil</label><input type="text" id="ft_movil"></div>
+      <div class="field"><label for="ft_conductor">Nombre del Conductor</label><input type="text" id="ft_conductor"></div>
+    </div>
+    <div class="warn-box" id="empresaWarnT" hidden>
+      ⚠ Ese nombre de empresa no coincide exactamente con la lista de Parámetros. La columna "Ejecutivo" (VLOOKUP) puede salir en blanco. Revisa la ortografía o elige una opción de la lista.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Completa el cierre del caso</h2>
+        <p>Canal queda fijo en "Ticket". Revisa quién registra, el N° de ticket y la respuesta dada al cliente.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Canal de comunicación</label>
+      <span class="channel-badge ticket">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4"/><path d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v0z"/></svg>
+        Ticket
+      </span>
+    </div>
+
+    <div class="row-inline">
+      <div class="field">
+        <label for="ft_atendido">Atendido por</label>
+        <input type="text" id="ft_atendido" list="dl_atendido" value="Melisa">
+        <p class="small-note">Quien resuelve o registra el caso en la BD.</p>
+      </div>
+      <div class="field">
+        <label for="ft_fecharecibo">Fecha en que recibo la incidencia</label>
+        <input type="date" id="ft_fecharecibo">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="ft_numticket_out">N° Tickets</label>
+      <input type="text" id="ft_numticket_out" class="mono">
+    </div>
+
+    <div class="field">
+      <label for="ft_descripcion">Descripción inicial de la incidencia (descargo usuario afectado)</label>
+      <textarea id="ft_descripcion" placeholder="Se llena solo con el Asunto + Descripción del paso 1 — puedes ajustarlo aquí."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="ft_accion">Acción correctiva de cara al Cliente</label>
+      <textarea id="ft_accion" placeholder="Respuesta/solución dada al cliente para cerrar el ticket"></textarea>
+    </div>
+  </div>
+
+  <div class="card result-card">
+    <div class="result-head">
+      <h2>Fila lista para pegar en la BD</h2>
+      <div class="result-actions">
+        <span class="copied-tag" id="copiedTagT">Copiado ✓</span>
+        <button class="btn btn-primary btn-sm" id="copyRowBtnT" type="button">Copiar fila</button>
+      </div>
+    </div>
+    <textarea class="output" id="outputRowT" readonly></textarea>
+    <p class="small-note">Pega esta fila empezando en la columna A, en la primera fila vacía justo debajo de la última fila de la tabla "Data". Incluye la columna "N° Tickets" en su lugar (entre Canal de comunicación y Fecha de la incidencia) — para los casos de Notificación App esa columna queda vacía, igual que hasta ahora.</p>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn btn-ghost" id="resetBtnT" type="button">Nuevo ticket</button>
+    <span class="small-note"></span>
+  </div>
+
+</div>
+
+<div id="modeTicketLote" hidden>
+
+  <div class="card">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Pega varias filas de tickets (Cereza)</h2>
+        <p class="lote-intro">Selecciona varias filas de la tabla de <a class="link" href="https://directo.cerezacc.pe/dashboard/tickets" target="_blank" rel="noopener">directo.cerezacc.pe/dashboard/tickets</a> (Fecha de creación, Número, Asunto, Descripción — con o sin encabezados) y pégalas aquí, una fila por ticket.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="loteTicketText">Filas de tickets</label>
+      <textarea id="loteTicketText" style="min-height:130px;" placeholder="Pega aquí varias filas copiadas de la tabla de Cereza"></textarea>
+    </div>
+    <button class="btn btn-primary" id="analizarLoteTicketBtn" type="button">Analizar tickets</button>
+    <div class="summary-row" id="loteTicketSummary" hidden></div>
+  </div>
+
+  <div class="card" id="loteTicketAtendidoCard" hidden>
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div>
+        <h2>Revisa cada ticket</h2>
+        <p class="lote-intro">Completa la Acción correctiva de cada uno (la respuesta con la que se cerró el ticket) y ajusta lo que haga falta. Si no se detectó IdServicio, escríbelo en el código.</p>
+      </div>
+    </div>
+    <div class="row-inline">
+      <div class="field">
+        <label for="loteTicket_atendido">Atendido por (aplica a todo el lote)</label>
+        <input type="text" id="loteTicket_atendido" list="dl_atendido" value="Melisa">
+      </div>
+      <div class="field">
+        <label>Canal de comunicación</label>
+        <span class="channel-badge ticket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4"/><path d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v0z"/></svg>
+          Ticket
+        </span>
+      </div>
+    </div>
+    <div id="loteTicketCasesList"></div>
+  </div>
+
+  <div class="card" id="loteTicketCrossCard" hidden>
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Cruza todos los códigos en el normalizador</h2>
+        <p class="lote-intro">Copia estos códigos y pégalos en el campo 2 del <a class="link" href="https://directo-central.github.io/normalizador_calidad/" target="_blank" rel="noopener">normalizador_calidad</a>. Pega abajo todas las filas que devuelva.</p>
+      </div>
+    </div>
+    <div class="codes-box" id="codesBoxTL"></div>
+    <button class="btn btn-ghost btn-sm" id="copyCodesBtnTL" type="button" style="margin-top:8px;">Copiar códigos</button>
+    <div class="field" style="margin-top:12px;">
+      <label for="loteNormPasteTL">Filas generadas por el normalizador (todas juntas)</label>
+      <textarea id="loteNormPasteTL" style="min-height:90px;" placeholder="Pega aquí todas las filas que generó el normalizador para estos códigos"></textarea>
+    </div>
+    <p class="hint" id="loteNormHintTL"></p>
+  </div>
+
+  <div class="card result-card" id="loteTicketResultCard" hidden>
+    <div class="result-head">
+      <h2>Bloque de filas listo para pegar</h2>
+      <div class="result-actions">
+        <span class="copied-tag" id="loteTicketCopiedTag">Copiado ✓</span>
+        <button class="btn btn-primary btn-sm" id="generarLoteTicketBtn" type="button">Generar bloque</button>
+        <button class="btn btn-ghost btn-sm" id="copyLoteTicketBtn" type="button">Copiar bloque</button>
+      </div>
+    </div>
+    <textarea class="output" id="loteTicketOutput" readonly style="min-height:140px;"></textarea>
+    <p class="small-note">Pega todo el bloque de una sola vez, empezando en la columna A de la primera fila vacía debajo de la tabla "Data" — cada línea es un ticket nuevo. Solo se incluyen los tickets con la casilla marcada arriba.</p>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn btn-ghost" id="resetLoteTicketBtn" type="button">Nuevo lote de tickets</button>
+    <span class="small-note"></span>
+  </div>
+
+</div>
+
+</main>
+
+<datalist id="dl_unidad">
+  <option value="Urbano"><option value="Destino"><option value="Aeropuerto"><option value="Jockey">
+  <option value="Playas"><option value="Bellavista"><option value="Avecim">
+  <option value="Latam"><option value="Sky"><option value="Jetsmart">
+</datalist>
+<datalist id="dl_modo">
+  <option value="App"><option value="Web"><option value="WhatsApp"><option value="Correo">
+  <option value="711(PBX)"><option value="Integración"><option value="Routing">
+  <option value="Wari/Web"><option value="Avecim"><option value="Counter">
+</datalist>
+<datalist id="dl_tipopet">
+  <option value="Reserva"><option value="Inmediato">
+</datalist>
+<datalist id="dl_tipocli">
+  <option value="Corporativo"><option value="Particular">
+</datalist>
+<datalist id="dl_flota">
+  <option value="Urbano"><option value="Aeropuerto"><option value="Destino"><option value="Jockey">
+  <option value="Latam"><option value="Sky"><option value="JetSmart"><option value="Van"><option value="Bellavista">
+</datalist>
+<datalist id="dl_atendido">
+  <option value="Melisa"><option value="Liliana"><option value="Sarahy"><option value="Ximena">
+</datalist>
+<datalist id="dl_empresa"></datalist>
+
+<script>
+(function(){
+  "use strict";
+
+  var EMPRESAS = ["Particular","Adecco Consulting S.A.","Adidas Peru S.A.C","Aeropuerto Del Peru","Agropecuaria Chachani (Grupo Gloria Sa)","Aguaytia Energy Del Peru S.R.L.","Ak Drilling","Alicorp S.A.A.","American Airlines Contingencia","American Airlines Taxi Administrativo","American Airlines Tripulantes","Americatel Peru S.A","Amphos 21","Analitica Del Pacifico","Anglo American Peru","Anglo American Quellaveco S.A.","Antamina","Apoyo Consultoria S.A.C.","Applus Norcontrol Peru S.A.C.","Arroz Costeño","Asesoria Empresarial Cercanna Sac","Asociación Unacem","Atkinsréalis Perú S.A.","Austral Group S.A.A","Autofin S.A.C","Aviles Asociados S.A.C.","Banco De Credito Del Peru - Bcp","Bcp - Visa Infinite","Belcorp Traslado Aeropuertos - Cetco S.A.","Calidda"];
+  try{
+    var dl = document.getElementById('dl_empresa');
+    var frag = document.createDocumentFragment();
+    EMPRESAS.forEach(function(name){
+      var o = document.createElement('option');
+      o.value = name;
+      frag.appendChild(o);
+    });
+    dl.appendChild(frag);
+  }catch(e){}
+
+  var COLS12 = ['f_fecha','f_unidad','f_hora','f_modo','f_tipopet','f_idservicio','f_tipocli','f_usuario','f_empresa','f_flota','f_movil','f_conductor'];
+  var COLS12T = ['ft_fecha','ft_unidad','ft_hora','ft_modo','ft_tipopet','ft_idservicio','ft_tipocli','ft_usuario','ft_empresa','ft_flota','ft_movil','ft_conductor'];
+
+  function $(id){ return document.getElementById(id); }
+
+  // ==== Duplicate-registry (db capability) ====================================
+  // Goal: warn when an IdServicio has already been registered before, either on
+  // the SAME channel (a literal duplicate paste) or on a DIFFERENT channel
+  // (a client complained by Notificación App and also called in, so the case
+  // risks getting entered twice). Everything lives in the shared `db` store so
+  // it survives across sessions/devices for whoever opens this tool.
+  //
+  // To stay well under the store's per-database document cap regardless of how
+  // many years of history this accumulates, entries are NOT one document per
+  // IdServicio — they're bucketed (by a hash of the code) into a small fixed
+  // number of documents, each holding a {code: [entries]} map.
+  var DB_BUCKETS = 40;
+  function bucketIdFor(code){
+    var s = String(code||'');
+    var n = 0;
+    for(var i=0;i<s.length;i++){ n = (n*31 + s.charCodeAt(i)) % DB_BUCKETS; }
+    if(n<0) n += DB_BUCKETS;
+    return 'b' + n;
+  }
+
+  var dbNamespacePromise = null;
+  function getDbNamespace(){
+    if(!dbNamespacePromise){
+      dbNamespacePromise = (function(){
+        try{
+          if(typeof claude === 'undefined' || !claude.use) return Promise.resolve(null);
+          return claude.use('db').then(function(db){ return db || null; }).catch(function(){ return null; });
+        }catch(e){ return Promise.resolve(null); }
+      })();
+    }
+    return dbNamespacePromise;
+  }
+
+  // Checks whether `code` already has entries in the registry, and whether any
+  // of them share `canalActual`. cb receives null (unavailable / no code) or
+  // {status:'none'|'same'|'other', entries:[...]} — entries filtered to the
+  // matching status (same-channel entries when status is 'same', otherwise the
+  // other-channel entries).
+  function checkDuplicado(code, canalActual, cb){
+    code = (code||'').trim();
+    if(!code){ cb(null); return; }
+    getDbNamespace().then(function(db){
+      if(!db){ cb(null); return; }
+      db.doc('registro/'+bucketIdFor(code)).get().then(function(snap){
+        var data = snap.exists ? snap.data() : null;
+        var entries = (data && data.entries && data.entries[code]) || [];
+        if(!entries.length){ cb({status:'none', entries:[]}); return; }
+        var same = entries.filter(function(e){ return e && e.canal === canalActual; });
+        var other = entries.filter(function(e){ return e && e.canal !== canalActual; });
+        if(same.length) cb({status:'same', entries: same});
+        else if(other.length) cb({status:'other', entries: other});
+        else cb({status:'none', entries:[]});
+      }).catch(function(){ cb(null); });
+    });
+  }
+
+  // Records that `code` was just registered under `canalActual` (called right
+  // when Melisa copies a finished row), so later checks — this session or a
+  // future one — catch it. Best-effort: failures are silently ignored, this
+  // is a helper, never a blocker for getting the row copied.
+  function registrarEnBase(code, canalActual, extra){
+    code = (code||'').trim();
+    if(!code) return;
+    extra = extra || {};
+    getDbNamespace().then(function(db){
+      if(!db) return;
+      var ref = db.doc('registro/'+bucketIdFor(code));
+      ref.get().then(function(snap){
+        var data = snap.exists ? snap.data() : null;
+        var entriesMap = (data && data.entries) ? data.entries : {};
+        var entries = entriesMap[code] || [];
+        var nueva = {canal: canalActual, ticket: extra.ticket||'', fecha: extra.fecha||'', atendido: extra.atendido||'', ts: new Date().toISOString()};
+        var yaEsta = entries.some(function(e){ return e && e.canal===nueva.canal && e.ticket===nueva.ticket && e.fecha===nueva.fecha; });
+        var patch = {entries:{}};
+        patch.entries[code] = yaEsta ? entries : entries.concat([nueva]);
+        (snap.exists ? ref.update(patch) : ref.set(patch)).catch(function(){});
+      }).catch(function(){});
+    });
+  }
+
+  function formatEntries(entries){
+    return entries.map(function(e){
+      var parts = [e.canal];
+      if(e.ticket) parts.push('Ticket #'+e.ticket);
+      if(e.fecha) parts.push(e.fecha);
+      return parts.join(' · ');
+    }).join('; ');
+  }
+
+  function renderDupInto(box, res){
+    if(!box) return;
+    if(!res || res.status === 'none' || !res.entries || !res.entries.length){
+      box.hidden = true; box.innerHTML = ''; box.classList.remove('danger');
+      return;
+    }
+    box.hidden = false;
+    if(res.status === 'same'){
+      box.classList.add('danger');
+      box.innerHTML = '⚠ Ya existe un registro por este <b>mismo canal</b> para este servicio: '+escapeHtml(formatEntries(res.entries))+'. Antes de continuar, verifica que no sea una carga duplicada.';
+    } else {
+      box.classList.remove('danger');
+      box.innerHTML = 'ℹ Este servicio ya fue registrado por <b>'+escapeHtml(res.entries[0].canal)+'</b>: '+escapeHtml(formatEntries(res.entries))+'. Podría ser el mismo reclamo llegado por otro canal — revisa antes de registrar uno nuevo.';
+    }
+  }
+
+  function checkCaseDup(card, c){
+    var note = card.querySelector('.case-dup-note');
+    if(!note) return;
+    var code = (c.op.idservicio || c.code || '').trim();
+    if(!code){ note.hidden = true; note.innerHTML=''; return; }
+    checkDuplicado(code, 'Notificación App', function(res){ renderDupInto(note, res); });
+  }
+
+  // Parses a paste of the whole "Data" table (header row + data rows, tab
+  // separated as Excel copies it) and pulls out just IdServicio, Canal de
+  // comunicación, N° Tickets and Fecha de la incidencia, wherever those
+  // columns happen to be — flexible so any full-table copy works.
+  function parseImportPaste(raw){
+    var lines = String(raw||'').split(/\r?\n/).filter(function(l){ return l.trim()!==''; });
+    if(!lines.length) return {rows:[], error:'no se pegó ningún texto.'};
+    var header = lines[0].split('\t').map(function(h){ return h.trim().toLowerCase(); });
+    function findCol(needles){
+      for(var i=0;i<header.length;i++){
+        for(var j=0;j<needles.length;j++){
+          if(header[i].indexOf(needles[j]) !== -1) return i;
+        }
+      }
+      return -1;
+    }
+    var idxCode = findCol(['idservicio']);
+    var idxCanal = findCol(['canal de comunicaci','canal']);
+    var idxTicket = findCol(['n° tickets','n tickets','nº tickets','tickets']);
+    var idxFecha = findCol(['fecha de la incidencia']);
+    if(idxCode === -1 || idxCanal === -1){
+      return {rows:[], error:'no encontré las columnas "IdServicio" y "Canal de comunicación" en la primera línea pegada — asegúrate de incluir la fila de encabezados de la tabla Data.'};
+    }
+    var rows = [];
+    for(var r=1;r<lines.length;r++){
+      var cells = lines[r].split('\t');
+      var code = (cells[idxCode]||'').trim().replace(/\.0+$/,'');
+      var canal = (cells[idxCanal]||'').trim();
+      if(!code || !canal) continue;
+      rows.push({
+        code: code,
+        canal: canal,
+        ticket: idxTicket>-1 ? (cells[idxTicket]||'').trim() : '',
+        fecha: idxFecha>-1 ? (cells[idxFecha]||'').trim() : ''
+      });
+    }
+    return {rows: rows, error: null};
+  }
+
+  // Bulk-seeds/refreshes the registry from a pasted export of the BD. Groups
+  // by bucket so this touches at most DB_BUCKETS documents no matter how many
+  // thousands of rows are pasted. Never drops existing entries — only adds.
+  function importarBase(raw, cb){
+    var parsed = parseImportPaste(raw);
+    if(parsed.error){ cb('error', parsed.error); return; }
+    if(!parsed.rows.length){ cb('error', 'no se encontraron filas con IdServicio y Canal de comunicación.'); return; }
+    getDbNamespace().then(function(db){
+      if(!db){ cb('error', 'la base compartida no está disponible en este visor.'); return; }
+      var byBucket = {};
+      parsed.rows.forEach(function(r){
+        var bId = bucketIdFor(r.code);
+        byBucket[bId] = byBucket[bId] || {};
+        byBucket[bId][r.code] = byBucket[bId][r.code] || [];
+        byBucket[bId][r.code].push({canal:r.canal, ticket:r.ticket, fecha:r.fecha, atendido:'', ts:'', importado:true});
+      });
+      var bucketIds = Object.keys(byBucket);
+      var i = 0;
+      function next(){
+        if(i >= bucketIds.length) return Promise.resolve();
+        var bId = bucketIds[i++];
+        var ref = db.doc('registro/'+bId);
+        return ref.get().then(function(snap){
+          var data = snap.exists ? snap.data() : null;
+          var entriesMap = (data && data.entries) ? data.entries : {};
+          Object.keys(byBucket[bId]).forEach(function(code){
+            var existing = entriesMap[code] || [];
+            byBucket[bId][code].forEach(function(ne){
+              var yaEsta = existing.some(function(e){ return e && e.canal===ne.canal && e.ticket===ne.ticket && e.fecha===ne.fecha; });
+              if(!yaEsta) existing = existing.concat([ne]);
+            });
+            entriesMap[code] = existing;
+          });
+          return ref.set({entries: entriesMap});
+        }).then(next);
+      }
+      next().then(function(){
+        return db.doc('registro/meta').set({lastImport: new Date().toISOString(), rows: parsed.rows.length});
+      }).then(function(){
+        cb('ok', parsed.rows.length);
+      }).catch(function(){
+        cb('error', 'ocurrió un problema guardando en la base — intenta de nuevo en unos segundos.');
+      });
+    });
+  }
+
+  function refreshDupStatus(){
+    var el = $('dupStatus');
+    if(!el) return;
+    getDbNamespace().then(function(db){
+      if(!db){
+        el.textContent = 'No disponible en este visor — la herramienta sigue funcionando normal, solo sin el aviso de duplicados.';
+        return;
+      }
+      db.doc('registro/meta').get().then(function(snap){
+        if(snap.exists && snap.data()){
+          var m = snap.data();
+          var fecha = m.lastImport ? new Date(m.lastImport).toLocaleDateString('es-PE') : '';
+          el.textContent = 'Última importación: ' + (m.rows!=null?m.rows:'?') + ' filas' + (fecha ? (' · ' + fecha) : '') + '. Avisa sola al detectar un IdServicio ya registrado.';
+        } else {
+          el.textContent = 'Aún no importaste tu historial — pulsa "Actualizar base" para cargarlo y activar el aviso de duplicados.';
+        }
+      }).catch(function(){
+        el.textContent = 'Base conectada — avisa al detectar un IdServicio ya registrado.';
+      });
+    });
+  }
+
+  $('dupToggleBtn').addEventListener('click', function(){
+    var box = $('dupImportBox');
+    box.hidden = !box.hidden;
+    this.textContent = box.hidden ? 'Actualizar base ▾' : 'Actualizar base ▴';
+  });
+
+  $('dupImportBtn').addEventListener('click', function(){
+    var raw = $('dupImportPaste').value;
+    var resEl = $('dupImportResult');
+    if(!raw.trim()){ resEl.textContent = 'Pega primero la tabla Data (con encabezados).'; return; }
+    resEl.textContent = 'Importando…';
+    var btn = this;
+    btn.disabled = true;
+    importarBase(raw, function(status, info){
+      btn.disabled = false;
+      if(status === 'error'){ resEl.textContent = '⚠ ' + info; return; }
+      resEl.textContent = '✓ Base actualizada con ' + info + ' filas revisadas.';
+      $('dupImportPaste').value = '';
+      refreshDupStatus();
+    });
+  });
+  // ==== end duplicate-registry ==================================================
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function isoFromDate(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function todayISO(){ return isoFromDate(new Date()); }
+  function isoToDMY(iso){
+    if(!iso) return '';
+    var p = iso.split('-');
+    if(p.length!==3) return iso;
+    return p[2]+'/'+p[1]+'/'+p[0];
+  }
+  function dmyToISO(dmy){
+    if(!dmy){ return todayISO(); }
+    var p = dmy.split('/');
+    if(p.length!==3) return todayISO();
+    return p[2]+'-'+pad(+p[1])+'-'+pad(+p[0]);
+  }
+
+  // ==== Ticket-row parser (used by single "Ticket" paste and by "Tickets (lote)") ====
+  // Parses one or more rows copied straight from the Cereza tickets table.
+  // Accepts a header row (any order/subset, matched by keyword) or, lacking
+  // one, falls back to the dashboard's own visible column order: Fecha de
+  // creación, Número, Asunto, Descripción, ...(resto ignorado).
+  // A line made up entirely of "---"-style placeholder cells (Cereza's way of
+  // showing an empty column) marks the start of the block of OTHER columns
+  // (Ref. externa, Canal/Medio de contacto, Cola, Estado, Prioridad) that
+  // Cereza's ticket export interleaves after each ticket's Descripción —
+  // never a real value, so it's a safe, distinctive boundary marker.
+  function isFooterStart(line){
+    var cells = line.split('\t').map(function(c){ return c.trim(); });
+    if(cells.length < 2) return false;
+    var hasDash = false;
+    var allDashOrEmpty = cells.every(function(c){
+      if(c === '') return true;
+      if(/^-+$/.test(c)){ hasDash = true; return true; }
+      return false;
+    });
+    return allDashOrEmpty && hasDash;
+  }
+
+  function parseTicketRow(raw){
+    var text = String(raw||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+    var lines = text.split('\n');
+    var firstNonEmpty = lines.filter(function(l){ return l.trim()!==''; })[0] || '';
+    // A header cell has to be the WHOLE cell content, nothing else — matching
+    // a header keyword just anywhere inside a data cell used to misfire on
+    // descriptions that start with "NÚMERO DE SERVICIO: ..." or similar and
+    // made the tool treat the only real row as a header, dropping it.
+    var firstCells = firstNonEmpty.split('\t').map(function(s){ return s.trim().toLowerCase(); });
+    var looksHeader = firstCells.some(function(c){ return /^n[úu]mero$|^n[°º]\.?\s*ticket$|^ticket$|^fecha(\s*de\s*(creaci[oó]n|registro))?$|^asunto$|^descripci[oó]n$/.test(c); });
+
+    if(looksHeader){
+      // Clean one-line-per-row paste with a header row: map the 4 wanted
+      // columns by exact name, wherever they sit — any other column (Medio
+      // de contacto, Estado, Criticidad, Cliente, Empresa, ...) just never
+      // gets mapped to anything, so it's ignored automatically regardless
+      // of order or how many extra columns there are.
+      var map = {};
+      firstCells.forEach(function(c, i){
+        if(map.numero===undefined && /^n[úu]mero$|^n[°º]\.?\s*ticket$|^ticket$/.test(c)) map.numero = i;
+        else if(map.fecha===undefined && /^fecha(\s*de\s*(creaci[oó]n|registro))?$/.test(c)) map.fecha = i;
+        else if(map.asunto===undefined && /^asunto$/.test(c)) map.asunto = i;
+        else if(map.descripcion===undefined && /^descripci[oó]n$/.test(c)) map.descripcion = i;
+      });
+      var dataLines = lines.slice(1).filter(function(l){ return l.trim()!==''; });
+      var rows = dataLines.map(function(ln){
+        var cells = ln.split('\t');
+        var numero = map.numero!=null ? (cells[map.numero]||'').trim().replace(/^(#|n[°º]\.?)\s*/i,'') : '';
+        var fecha = map.fecha!=null ? (cells[map.fecha]||'').trim() : '';
+        var asunto = map.asunto!=null ? (cells[map.asunto]||'').trim() : '';
+        var descripcion = map.descripcion!=null ? (cells[map.descripcion]||'').trim() : '';
+        return {numero:numero, fecha:fecha, asunto:asunto, descripcion:descripcion};
+      }).filter(function(r){ return r.numero || r.asunto || r.descripcion; });
+      return {rows: rows};
+    }
+
+    // No header: Cereza's own ticket-list export. Each ticket starts with a
+    // line "{fecha}\t# {numero}\t{asunto}\t" and is followed by its
+    // (possibly multi-paragraph) Descripción; after that comes a block of
+    // OTHER columns (Ref. externa, Canal, Cola, Estado, Prioridad) that
+    // isn't one of the 4 fields wanted here — everything from that block's
+    // "---" marker up to the next ticket's start line is dropped, while
+    // genuine blank lines INSIDE the description (paragraph breaks) are kept.
+    var TICKET_START_RE = /^(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}[^\t]*)\t\s*(?:#|n[°º]\.?)?\s*(\d+)\t([^\t]*)\t?\s*$/i;
+    var rows = [];
+    var i = 0;
+    while(i < lines.length){
+      var m = lines[i].match(TICKET_START_RE);
+      if(!m){ i++; continue; }
+      var fecha = m[1].trim(), numero = m[2].trim(), asunto = m[3].trim();
+      i++;
+      var descLines = [];
+      var inFooter = false;
+      while(i < lines.length && !TICKET_START_RE.test(lines[i])){
+        if(!inFooter && isFooterStart(lines[i])){ inFooter = true; i++; continue; }
+        if(!inFooter) descLines.push(lines[i]);
+        i++;
+      }
+      var descripcion = descLines.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+      rows.push({fecha:fecha, numero:numero, asunto:asunto, descripcion:descripcion});
+    }
+    return {rows: rows};
+  }
+  function ticketFechaToISO(s){
+    var m = String(s||'').match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if(!m) return '';
+    return m[3]+'-'+pad(+m[2])+'-'+pad(+m[1]);
+  }
+
+  // ==== Shared mailbox-text parser (used by "Un caso" auto-detect and by "Lote") ====
+  var MESES_JS = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,
+    setiembre:9,septiembre:9,octubre:10,noviembre:11,diciembre:12,
+    january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,
+    september:9,october:10,november:11,december:12};
+
+  function parseFechaEnviado(s){
+    s = (s||'').trim();
+    var m = s.match(/(\d{1,2})\s+de\s+([a-záéíóúA-ZÁÉÍÓÚ]+)\s+de\s+(\d{4})\s+(\d{1,2}):(\d{2})/i);
+    if(!m) m = s.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+    if(!m) return null;
+    var d=+m[1], moN=MESES_JS[m[2].toLowerCase()], y=+m[3], hh=+m[4], mm=+m[5];
+    if(!moN) return null;
+    return new Date(y, moN-1, d, hh, mm);
+  }
+  function dateToDMY(dt){ return dt ? (pad(dt.getDate())+'/'+pad(dt.getMonth()+1)+'/'+dt.getFullYear()) : ''; }
+
+  function parseMailboxText(text){
+    var lines = String(text||'').split(/\r?\n/);
+    var blocks = [], cur = null, i = 0, n = lines.length;
+    function isDe(l){ return /^De:\s*/.test(l); }
+    function isEnv(l){ return /^Enviado(\s+el)?:/i.test(l); }
+    function isPara(l){ return /^Para:/.test(l); }
+    function isCC(l){ return /^CC:/.test(l); }
+    function isAsunto(l){ return /^Asunto:/.test(l); }
+    while(i < n){
+      var ln = lines[i];
+      if(isDe(ln)){
+        if(cur) blocks.push(cur);
+        cur = {from: ln.replace(/^De:\s*/,'').trim(), enviado:'', para:'', cc:'', asunto:'', bodyLines:[]};
+        i++;
+        if(i<n && isEnv(lines[i])){ cur.enviado = lines[i].replace(/^Enviado(\s+el)?:\s*/i,'').trim(); i++; }
+        var paraParts = [];
+        if(i<n && isPara(lines[i])){
+          paraParts.push(lines[i].replace(/^Para:\s*/,'').trim()); i++;
+          while(i<n && !isCC(lines[i]) && !isAsunto(lines[i]) && lines[i].trim()!==''){ paraParts.push(lines[i].trim()); i++; }
+        }
+        cur.para = paraParts.join(' ');
+        var ccParts = [];
+        if(i<n && isCC(lines[i])){
+          ccParts.push(lines[i].replace(/^CC:\s*/,'').trim()); i++;
+          while(i<n && !isAsunto(lines[i]) && lines[i].trim()!==''){ ccParts.push(lines[i].trim()); i++; }
+        }
+        cur.cc = ccParts.join(' ');
+        if(i<n && isAsunto(lines[i])){ cur.asunto = lines[i].replace(/^Asunto:\s*/,'').trim(); i++; }
+        continue;
+      } else {
+        if(cur) cur.bodyLines.push(ln);
+        i++;
+      }
+    }
+    if(cur) blocks.push(cur);
+    blocks.forEach(function(b){
+      b.body = b.bodyLines.join('\n').trim();
+      delete b.bodyLines;
+      var m = b.asunto.match(/\((\d{5,8})\)/);
+      b.code = m ? m[1] : null;
+      b.dt = parseFechaEnviado(b.enviado);
+      b.isReply = /^(RE|Re|RV|Rv|FW|Fwd)\s*:/.test(b.asunto);
+      b.isOriginal = !b.isReply && /directoapp\.pe/i.test(b.from) && /no-reply/i.test(b.from);
+    });
+    return blocks;
+  }
+
+  var BANNER_RE = /(^_{10,}$)|(\(cid:\d+\))|(^ALERTA)|(PRECAUCI[ÓO]N:\s*CORREO EXTERNO)|(no pertenece a la compañ)|(Phish Alert)|(reconozca al remitente)|(abra los archivos adjuntos)|(haga clic en los enlaces)|(es externo a \w+)/i;
+  function cleanBody(body){
+    var lines = String(body||'').split('\n');
+    var out = [], skipping = true;
+    for(var i=0;i<lines.length;i++){
+      var ln = lines[i];
+      if(skipping && (ln.trim()==='' || BANNER_RE.test(ln))) continue;
+      skipping = false;
+      out.push(ln);
+    }
+    return out.join('\n').trim();
+  }
+
+  function buildCasesFromBlocks(blocks){
+    var byCode = {};
+    blocks.forEach(function(b){ if(b.code){ (byCode[b.code] = byCode[b.code]||[]).push(b); } });
+    var cases = [];
+    Object.keys(byCode).sort().forEach(function(code){
+      var bl = byCode[code];
+      var originals = bl.filter(function(b){return b.isOriginal;})
+        .sort(function(a,b){ return (a.dt?a.dt.getTime():Infinity) - (b.dt?b.dt.getTime():Infinity); });
+      var original = originals[0] || null;
+
+      var responses = [];
+      bl.forEach(function(b){
+        if(b===original) return;
+        if(/directoapp\.pe/i.test(b.from) && !/no-reply/i.test(b.from) && b.isReply && !/directoapp\.pe/i.test(b.para)){
+          var cb = cleanBody(b.body);
+          if(cb) responses.push({dt:b.dt, body:cb});
+        }
+      });
+      var seen = {}, uniq = [];
+      responses.forEach(function(r){ if(!seen[r.body]){ seen[r.body]=true; uniq.push(r); } });
+      uniq.sort(function(a,b){ return (a.dt?a.dt.getTime():0) - (b.dt?b.dt.getTime():0); });
+
+      var flags = [];
+      if(!original) flags.push('SIN_ORIGINAL');
+      if(!uniq.length) flags.push('SIN_RESPUESTA');
+      if(uniq.length>1) flags.push('VARIAS_RESPUESTAS('+uniq.length+')');
+
+      var allText = bl.map(function(b){return b.body;}).join(' ');
+      var otherCodes = {}, re = /servicio\s*(?:fue|es|n[°º.]?)\s*[:.]?\s*(\d{6,8})/ig, m;
+      while((m = re.exec(allText))){ if(m[1]!==code) otherCodes[m[1]]=true; }
+      var otherList = Object.keys(otherCodes);
+      if(otherList.length) flags.push('POSIBLE_CODIGO_REAL:'+otherList.join(','));
+
+      cases.push({
+        code: code,
+        fechaRecibo: original && original.dt ? dateToDMY(original.dt) : '',
+        descripcion: original ? cleanBody(original.body) : '',
+        accion: uniq.length ? uniq[uniq.length-1].body : '',
+        altAcciones: uniq.length>1 ? uniq.slice(0,-1).map(function(r){return r.body;}) : [],
+        flags: flags,
+        include: true,
+        op: {fecha:'',unidad:'',hora:'',modo:'',tipopet:'',idservicio:code,tipocli:'',usuario:'',empresa:'',flota:'',movil:'',conductor:''}
+      });
+    });
+    return cases;
+  }
+
+  function flagsToText(c){
+    var parts = [];
+    c.flags.forEach(function(f){
+      if(f==='SIN_RESPUESTA') return;
+      if(f==='SIN_ORIGINAL'){ parts.push('no encontré el correo original de Directo App para este código en el texto pegado — revisa que esté incluido, o completa la fecha y la descripción a mano'); return; }
+      if(f.indexOf('VARIAS_RESPUESTAS')===0) parts.push('hay más de una respuesta al cliente en el correo — revisa cuál corresponde');
+      else if(f.indexOf('POSIBLE_CODIGO_REAL')===0){
+        var v = f.split(':')[1] || '';
+        parts.push('el cliente menciona otro número de servicio ('+v+') — confirma cuál es el correcto');
+      }
+    });
+    return parts.join(' · ');
+  }
+
+  // ==== PDF attach (Lote mode) — extracts text client-side with pdf.js, loaded
+  // lazily only when Melisa actually attaches a file, then feeds it through the
+  // same parseMailboxText()/buildCasesFromBlocks() pipeline as pasted text. ====
+  var PDFJS_VERSION = '3.11.174';
+  var pdfLibReady = null;
+  function ensurePdfLib(){
+    if(pdfLibReady) return pdfLibReady;
+    pdfLibReady = new Promise(function(resolve, reject){
+      if(window.pdfjsLib){ resolve(window.pdfjsLib); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/'+PDFJS_VERSION+'/pdf.min.js';
+      s.onload = function(){
+        try{
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/'+PDFJS_VERSION+'/pdf.worker.min.js';
+          resolve(window.pdfjsLib);
+        }catch(e){ reject(e); }
+      };
+      s.onerror = function(){ reject(new Error('no se pudo cargar la librería de PDF')); };
+      document.head.appendChild(s);
+    });
+    return pdfLibReady;
+  }
+
+  // Text items from pdf.js come as individual runs with x/y position, not
+  // reconstructed lines. Group runs whose baseline y is close together into
+  // one line, then order those lines top-to-bottom (and left-to-right within
+  // a line) so header lines like "De:"/"Enviado el:"/"Asunto:" stay intact.
+  function extractPageLines(items){
+    var sorted = items.slice().sort(function(a,b){ return b.transform[5]-a.transform[5]; });
+    var lines = [], current = null, currentY = null;
+    sorted.forEach(function(it){
+      var y = it.transform[5];
+      if(current === null || Math.abs(y-currentY) > 2.5){
+        current = []; lines.push(current); currentY = y;
+      }
+      current.push(it);
+    });
+    return lines.map(function(line){
+      line.sort(function(a,b){ return a.transform[4]-b.transform[4]; });
+      return line.map(function(it){ return it.str; }).join('');
+    });
+  }
+
+  function extractPdfText(arrayBuffer){
+    return ensurePdfLib().then(function(pdfjsLib){
+      return pdfjsLib.getDocument({data: arrayBuffer}).promise.then(function(pdf){
+        var textByPage = new Array(pdf.numPages);
+        var i = 0;
+        function next(){
+          if(i >= pdf.numPages) return Promise.resolve();
+          var p = i + 1;
+          return pdf.getPage(p).then(function(page){ return page.getTextContent(); }).then(function(content){
+            textByPage[i] = extractPageLines(content.items).join('\n');
+            i++;
+            return next();
+          });
+        }
+        return next().then(function(){ return textByPage.join('\n\n'); });
+      });
+    });
+  }
+
+  $('loteFileInput').addEventListener('change', function(){
+    var file = this.files && this.files[0];
+    var statusEl = $('lotePdfStatus');
+    if(!file) return;
+    statusEl.textContent = 'Leyendo ' + file.name + '…';
+    var reader = new FileReader();
+    reader.onload = function(){
+      extractPdfText(reader.result).then(function(text){
+        $('loteText').value = text;
+        statusEl.textContent = 'PDF leído (' + file.name + '). Si el texto se ve bien, ya se analizó solo — si no, ajústalo abajo y presiona "Analizar y separar casos" de nuevo.';
+        $('analizarLoteBtn').click();
+      }).catch(function(){
+        statusEl.textContent = '⚠ No se pudo leer este PDF automáticamente. Copia y pega el texto del correo directamente en el cuadro de abajo.';
+      });
+    };
+    reader.onerror = function(){
+      statusEl.textContent = '⚠ No se pudo abrir el archivo. Copia y pega el texto directamente en el cuadro de abajo.';
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  // ==== Lote mode ====
+  var casesState = [];
+  var OPS_FIELDS = [
+    {key:'fecha', label:'Fecha incidencia'},
+    {key:'unidad', label:'Unidad Negocio', list:'dl_unidad'},
+    {key:'hora', label:'Hora Servicio'},
+    {key:'modo', label:'Modo Reserva', list:'dl_modo'},
+    {key:'tipopet', label:'Tipo Petición', list:'dl_tipopet'},
+    {key:'idservicio', label:'IdServicio'},
+    {key:'tipocli', label:'Tipo Cliente', list:'dl_tipocli'},
+    {key:'usuario', label:'Usuario afectado'},
+    {key:'empresa', label:'Empresa afectada', list:'dl_empresa'},
+    {key:'flota', label:'Flota', list:'dl_flota'},
+    {key:'movil', label:'N° Móvil'},
+    {key:'conductor', label:'Conductor'}
+  ];
+
+  $('analizarLoteBtn').addEventListener('click', function(){
+    var blocks = parseMailboxText($('loteText').value);
+    casesState = buildCasesFromBlocks(blocks);
+    $('loteAtendidoCard').hidden = casesState.length === 0;
+    $('loteCrossCard').hidden = casesState.length === 0;
+    $('loteResultCard').hidden = casesState.length === 0;
+    renderCases();
+  });
+
+  function renderCases(){
+    var list = $('loteCasesList');
+    list.innerHTML = '';
+    casesState.forEach(function(c, idx){
+      var reviewFlags = c.flags.filter(function(f){ return f!=='SIN_RESPUESTA'; });
+      var card = document.createElement('div');
+      card.className = 'case-card' + (reviewFlags.length ? ' review' : '');
+      var chipClass = 'pending', chipText = 'Sin respuesta aún';
+      if(reviewFlags.length){ chipClass = 'review'; chipText = 'Revisar'; }
+      else if(c.accion){ chipClass = 'ok'; chipText = 'Con respuesta'; }
+
+      var opsHtml = OPS_FIELDS.map(function(f){
+        return '<div class="field"><label>'+f.label+'</label><input type="text" class="c-op" data-op="'+f.key+'" value="'+escapeHtml(c.op[f.key]||'')+'"'+(f.list?' list="'+f.list+'"':'')+'></div>';
+      }).join('');
+
+      card.innerHTML =
+        '<div class="case-card-head">'
+        + '<input type="checkbox" class="c-include" '+(c.include?'checked':'')+'>'
+        + '<input type="text" class="case-code-input c-code" value="'+escapeHtml(c.code)+'">'
+        + '<input type="date" class="case-date-input c-fecha" value="'+(c.fechaRecibo ? dmyToISO(c.fechaRecibo) : '')+'">'
+        + '<span class="status-chip '+chipClass+'">'+chipText+'</span>'
+        + '</div>'
+        + '<div class="case-body-grid">'
+        + '<div class="field"><label>Descripción inicial</label><textarea class="c-descripcion">'+escapeHtml(c.descripcion)+'</textarea></div>'
+        + '<div class="field"><label>Acción correctiva de cara al Cliente</label><textarea class="c-accion" placeholder="Sin respuesta detectada — complétala si ya respondiste">'+escapeHtml(c.accion)+'</textarea></div>'
+        + '</div>'
+        + (reviewFlags.length ? '<div class="case-flag-note">⚠ '+escapeHtml(flagsToText(c))+(c.altAcciones.length?' · <button type="button" class="swap-alt">usar la otra respuesta detectada</button>':'')+'</div>' : '')
+        + '<div class="warn-box case-dup-note" hidden></div>'
+        + '<button type="button" class="case-ops-toggle">Ver/completar los 12 campos del servicio ▾</button>'
+        + '<div class="case-ops-grid" hidden>'+opsHtml+'</div>';
+
+      card.querySelector('.c-include').addEventListener('change', function(){ c.include = this.checked; updateCodesBox(); updateLoteSummary(); });
+      card.querySelector('.c-code').addEventListener('input', function(){ c.code = this.value.trim(); c.op.idservicio = c.code; updateCodesBox(); checkCaseDup(card, c); });
+      card.querySelector('.c-fecha').addEventListener('input', function(){ c.fechaRecibo = isoToDMY(this.value); });
+      card.querySelector('.c-descripcion').addEventListener('input', function(){ c.descripcion = this.value; });
+      card.querySelector('.c-accion').addEventListener('input', function(){ c.accion = this.value; });
+      var swapBtn = card.querySelector('.swap-alt');
+      if(swapBtn){
+        swapBtn.addEventListener('click', function(){
+          var other = c.altAcciones.shift();
+          c.altAcciones.push(c.accion);
+          c.accion = other;
+          renderCases();
+        });
+      }
+      card.querySelector('.case-ops-toggle').addEventListener('click', function(){
+        var grid = card.querySelector('.case-ops-grid');
+        grid.hidden = !grid.hidden;
+        this.textContent = grid.hidden ? 'Ver/completar los 12 campos del servicio ▾' : 'Ocultar los 12 campos del servicio ▴';
+      });
+      Array.prototype.forEach.call(card.querySelectorAll('.c-op'), function(inp){
+        inp.addEventListener('input', function(){ c.op[this.getAttribute('data-op')] = this.value; });
+      });
+
+      list.appendChild(card);
+      checkCaseDup(card, c);
+    });
+    updateCodesBox();
+    updateLoteSummary();
+  }
+
+  function updateCodesBox(){
+    var codes = casesState.filter(function(c){return c.include;}).map(function(c){return c.code;});
+    $('codesBox').textContent = codes.join('\n');
+  }
+
+  function updateLoteSummary(){
+    var total = casesState.length;
+    var conResp = casesState.filter(function(c){return c.accion;}).length;
+    var revisar = casesState.filter(function(c){ return c.flags.some(function(f){ return f!=='SIN_RESPUESTA'; }); }).length;
+    var sum = $('loteSummary');
+    if(!total){ sum.hidden = true; return; }
+    sum.hidden = false;
+    sum.innerHTML = '<span><b>'+total+'</b> casos detectados</span><span><b>'+conResp+'</b> con respuesta</span><span><b>'+(total-conResp)+'</b> sin respuesta aún</span>'
+      + (revisar ? '<span style="color:var(--warn);"><b>'+revisar+'</b> para revisar</span>' : '');
+  }
+
+  $('copyCodesBtn').addEventListener('click', function(){
+    copyText($('codesBox').textContent, null);
+  });
+
+  $('loteNormPaste').addEventListener('input', function(){
+    var linesRaw = this.value.split(/\r?\n/).filter(function(l){ return l.trim()!==''; });
+    var matched = 0;
+    linesRaw.forEach(function(line){
+      var parts = line.split('\t').map(function(p){ return p.trim(); });
+      if(parts.length < 6) return;
+      var code = parts[5];
+      var c = casesState.filter(function(cc){ return cc.code === code; })[0];
+      if(!c) return;
+      matched++;
+      c.op = {
+        fecha: parts[0]||'', unidad: parts[1]||'', hora: parts[2]||'', modo: parts[3]||'',
+        tipopet: parts[4]||'', idservicio: parts[5]||code, tipocli: parts[6]||'',
+        usuario: parts[7]||'', empresa: parts[8]||'', flota: parts[9]||'',
+        movil: parts[10]||'', conductor: parts[11]||''
+      };
+    });
+    $('loteNormHint').textContent = linesRaw.length ? (matched+' de '+linesRaw.length+' filas se cruzaron con un caso por su IdServicio.') : '';
+    renderCases();
+  });
+
+  $('generarLoteBtn').addEventListener('click', function(){
+    var atendido = $('lote_atendido').value.trim();
+    var incluidos = casesState.filter(function(c){ return c.include; });
+    var rows = incluidos.map(function(c){
+      return assembleRow({
+        canal: 'Notificación App',
+        atendido: atendido,
+        fechaRecibo: c.fechaRecibo,
+        fecha: c.op.fecha, unidad: c.op.unidad, hora: c.op.hora, modo: c.op.modo,
+        tipopet: c.op.tipopet, idservicio: c.op.idservicio || c.code, tipocli: c.op.tipocli,
+        usuario: c.op.usuario, empresa: c.op.empresa, flota: c.op.flota,
+        movil: c.op.movil, conductor: c.op.conductor,
+        descripcion: c.descripcion, accion: c.accion
+      });
+    });
+    $('loteOutput').value = rows.join('\n');
+    incluidos.forEach(function(c){
+      registrarEnBase(c.op.idservicio || c.code, 'Notificación App', { fecha: c.fechaRecibo, atendido: atendido });
+    });
+  });
+
+  $('copyLoteBtn').addEventListener('click', function(){
+    var text = $('loteOutput').value;
+    if(!text.trim()) return;
+    copyText(text, null);
+    var tag = $('loteCopiedTag');
+    tag.classList.add('show');
+    setTimeout(function(){ tag.classList.remove('show'); }, 1400);
+  });
+
+  $('resetLoteBtn').addEventListener('click', function(){
+    $('loteText').value = '';
+    $('loteFileInput').value = '';
+    $('lotePdfStatus').textContent = '';
+    $('loteNormPaste').value = '';
+    $('loteOutput').value = '';
+    $('loteNormHint').textContent = '';
+    casesState = [];
+    $('loteAtendidoCard').hidden = true;
+    $('loteCrossCard').hidden = true;
+    $('loteResultCard').hidden = true;
+    $('loteSummary').hidden = true;
+  });
+
+  // ==== Tickets (lote) mode ====
+  var casesStateT = [];
+
+  $('analizarLoteTicketBtn').addEventListener('click', function(){
+    var parsed = parseTicketRow($('loteTicketText').value);
+    casesStateT = parsed.rows.map(function(r){
+      var combined = [r.asunto, r.descripcion].filter(function(s){ return s && s.trim(); }).join('\n');
+      var det = detectCodes(combined);
+      return {
+        numero: r.numero, fecha: r.fecha, descripcion: combined,
+        code: det.best || '', accion: '', include: true,
+        op: {fecha:'',unidad:'',hora:'',modo:'',tipopet:'',idservicio:det.best||'',tipocli:'',usuario:'',empresa:'',flota:'',movil:'',conductor:''}
+      };
+    });
+    $('loteTicketAtendidoCard').hidden = casesStateT.length === 0;
+    $('loteTicketCrossCard').hidden = casesStateT.length === 0;
+    $('loteTicketResultCard').hidden = casesStateT.length === 0;
+    renderTicketCases();
+  });
+
+  function checkCaseDupTicket(card, c){
+    var note = card.querySelector('.case-dup-note');
+    if(!note) return;
+    var code = (c.op.idservicio || c.code || '').trim();
+    if(!code){ note.hidden = true; note.innerHTML = ''; return; }
+    checkDuplicado(code, 'Ticket', function(res){ renderDupInto(note, res); });
+  }
+
+  function updateCodesBoxTL(){
+    var codes = casesStateT.filter(function(c){ return c.include; }).map(function(c){ return c.code; }).filter(Boolean);
+    $('codesBoxTL').textContent = codes.join('\n');
+  }
+
+  function updateLoteTicketSummary(){
+    var total = casesStateT.length;
+    var sinCodigo = casesStateT.filter(function(c){ return !c.code; }).length;
+    var sum = $('loteTicketSummary');
+    if(!total){ sum.hidden = true; return; }
+    sum.hidden = false;
+    sum.innerHTML = '<span><b>'+total+'</b> tickets detectados</span>'
+      + (sinCodigo ? '<span style="color:var(--warn);"><b>'+sinCodigo+'</b> sin IdServicio detectado — complétalo a mano</span>' : '');
+  }
+
+  function renderTicketCases(){
+    var list = $('loteTicketCasesList');
+    list.innerHTML = '';
+    casesStateT.forEach(function(c){
+      var card = document.createElement('div');
+      card.className = 'case-card';
+      var opsHtml = OPS_FIELDS.map(function(f){
+        return '<div class="field"><label>'+f.label+'</label><input type="text" class="c-op" data-op="'+f.key+'" value="'+escapeHtml(c.op[f.key]||'')+'"'+(f.list?' list="'+f.list+'"':'')+'></div>';
+      }).join('');
+      card.innerHTML =
+        '<div class="case-card-head">'
+        + '<input type="checkbox" class="c-include" '+(c.include?'checked':'')+'>'
+        + '<input type="text" class="case-code-input c-code" value="'+escapeHtml(c.code)+'" title="IdServicio" style="width:90px;">'
+        + '<input type="text" class="case-code-input c-ticketnum" value="'+escapeHtml(c.numero)+'" title="N° Ticket" style="width:70px;">'
+        + '<input type="date" class="case-date-input c-fecha" value="'+(c.fecha ? dmyToISO(c.fecha) : '')+'">'
+        + '<span class="status-chip pending">'+escapeHtml(c.numero||'?')+'</span>'
+        + '</div>'
+        + '<div class="case-body-grid">'
+        + '<div class="field"><label>Descripción inicial (Asunto + Descripción)</label><textarea class="c-descripcion">'+escapeHtml(c.descripcion)+'</textarea></div>'
+        + '<div class="field"><label>Acción correctiva de cara al Cliente</label><textarea class="c-accion" placeholder="Respuesta/solución con la que se cerró el ticket">'+escapeHtml(c.accion)+'</textarea></div>'
+        + '</div>'
+        + '<div class="warn-box case-dup-note" hidden></div>'
+        + '<button type="button" class="case-ops-toggle">Ver/completar los 12 campos del servicio ▾</button>'
+        + '<div class="case-ops-grid" hidden>'+opsHtml+'</div>';
+
+      card.querySelector('.c-include').addEventListener('change', function(){ c.include = this.checked; updateCodesBoxTL(); updateLoteTicketSummary(); });
+      card.querySelector('.c-code').addEventListener('input', function(){ c.code = this.value.trim(); c.op.idservicio = c.code; updateCodesBoxTL(); checkCaseDupTicket(card, c); });
+      card.querySelector('.c-ticketnum').addEventListener('input', function(){ c.numero = this.value.trim(); });
+      card.querySelector('.c-fecha').addEventListener('input', function(){ c.fecha = isoToDMY(this.value); });
+      card.querySelector('.c-descripcion').addEventListener('input', function(){ c.descripcion = this.value; });
+      card.querySelector('.c-accion').addEventListener('input', function(){ c.accion = this.value; });
+      card.querySelector('.case-ops-toggle').addEventListener('click', function(){
+        var grid = card.querySelector('.case-ops-grid');
+        grid.hidden = !grid.hidden;
+        this.textContent = grid.hidden ? 'Ver/completar los 12 campos del servicio ▾' : 'Ocultar los 12 campos del servicio ▴';
+      });
+      Array.prototype.forEach.call(card.querySelectorAll('.c-op'), function(inp){
+        inp.addEventListener('input', function(){ c.op[this.getAttribute('data-op')] = this.value; });
+      });
+
+      list.appendChild(card);
+      checkCaseDupTicket(card, c);
+    });
+    updateCodesBoxTL();
+    updateLoteTicketSummary();
+  }
+
+  $('copyCodesBtnTL').addEventListener('click', function(){
+    copyText($('codesBoxTL').textContent, null);
+  });
+
+  $('loteNormPasteTL').addEventListener('input', function(){
+    var linesRaw = this.value.split(/\r?\n/).filter(function(l){ return l.trim()!==''; });
+    var matched = 0;
+    linesRaw.forEach(function(line){
+      var parts = line.split('\t').map(function(p){ return p.trim(); });
+      if(parts.length < 6) return;
+      var code = parts[5];
+      var c = casesStateT.filter(function(cc){ return cc.code === code; })[0];
+      if(!c) return;
+      matched++;
+      c.op = {
+        fecha: parts[0]||'', unidad: parts[1]||'', hora: parts[2]||'', modo: parts[3]||'',
+        tipopet: parts[4]||'', idservicio: parts[5]||code, tipocli: parts[6]||'',
+        usuario: parts[7]||'', empresa: parts[8]||'', flota: parts[9]||'',
+        movil: parts[10]||'', conductor: parts[11]||''
+      };
+    });
+    $('loteNormHintTL').textContent = linesRaw.length ? (matched+' de '+linesRaw.length+' filas se cruzaron con un ticket por su IdServicio.') : '';
+    renderTicketCases();
+  });
+
+  $('generarLoteTicketBtn').addEventListener('click', function(){
+    var atendido = $('loteTicket_atendido').value.trim();
+    var incluidos = casesStateT.filter(function(c){ return c.include; });
+    var rows = incluidos.map(function(c){
+      return assembleRow({
+        canal: 'Ticket',
+        numTicket: c.numero,
+        atendido: atendido,
+        fechaRecibo: c.fecha,
+        fecha: c.op.fecha, unidad: c.op.unidad, hora: c.op.hora, modo: c.op.modo,
+        tipopet: c.op.tipopet, idservicio: c.op.idservicio || c.code, tipocli: c.op.tipocli,
+        usuario: c.op.usuario, empresa: c.op.empresa, flota: c.op.flota,
+        movil: c.op.movil, conductor: c.op.conductor,
+        descripcion: c.descripcion, accion: c.accion
+      });
+    });
+    $('loteTicketOutput').value = rows.join('\n');
+    incluidos.forEach(function(c){
+      registrarEnBase(c.op.idservicio || c.code, 'Ticket', { ticket: c.numero, fecha: c.fecha, atendido: atendido });
+    });
+  });
+
+  $('copyLoteTicketBtn').addEventListener('click', function(){
+    var text = $('loteTicketOutput').value;
+    if(!text.trim()) return;
+    copyText(text, null);
+    var tag = $('loteTicketCopiedTag');
+    tag.classList.add('show');
+    setTimeout(function(){ tag.classList.remove('show'); }, 1400);
+  });
+
+  $('resetLoteTicketBtn').addEventListener('click', function(){
+    $('loteTicketText').value = '';
+    $('loteNormPasteTL').value = '';
+    $('loteTicketOutput').value = '';
+    $('loteNormHintTL').textContent = '';
+    casesStateT = [];
+    $('loteTicketAtendidoCard').hidden = true;
+    $('loteTicketCrossCard').hidden = true;
+    $('loteTicketResultCard').hidden = true;
+    $('loteTicketSummary').hidden = true;
+  });
+
+  // ==== Mode toggle ====
+  var activeMode = 'single';
+  var MODE_DIVS = {single:'modeSingle', lote:'modeLote', ticket:'modeTicket', ticketlote:'modeTicketLote'};
+  var MODE_BTNS = {single:'tabSingleBtn', lote:'tabLoteBtn', ticket:'tabTicketBtn', ticketlote:'tabTicketLoteBtn'};
+  function setActiveMode(mode){
+    activeMode = mode;
+    Object.keys(MODE_DIVS).forEach(function(k){ $(MODE_DIVS[k]).hidden = (k !== mode); });
+    Object.keys(MODE_BTNS).forEach(function(k){ $(MODE_BTNS[k]).classList.toggle('active', k === mode); });
+    updateCaseBadge();
+  }
+  $('tabSingleBtn').addEventListener('click', function(){ setActiveMode('single'); });
+  $('tabLoteBtn').addEventListener('click', function(){ setActiveMode('lote'); });
+  $('tabTicketBtn').addEventListener('click', function(){ setActiveMode('ticket'); });
+  $('tabTicketLoteBtn').addEventListener('click', function(){ setActiveMode('ticketlote'); });
+
+  $('f_fecharecibo').value = todayISO();
+  $('ft_fecharecibo').value = todayISO();
+  $('t_fechacreacion').value = todayISO();
+
+  // ---- Step 1 (Un caso): detect IdServicio from complaint text ----
+  var selectedCode = '';
+  var selectedCodeT = '';
+
+  function detectCodes(text){
+    var proximity = [];
+    var re1 = /servicio[:\s]*n?[°º]?\s*(\d{5,8})/gi;
+    var m;
+    while((m = re1.exec(text))){ proximity.push(m[1]); }
+
+    var bare = [];
+    var re2 = /\b\d{6,8}\b/g;
+    while((m = re2.exec(text))){ bare.push(m[0]); }
+
+    var seen = {};
+    var ordered = [];
+    proximity.concat(bare).forEach(function(c){
+      if(!seen[c]){ seen[c]=true; ordered.push(c); }
+    });
+    return { best: proximity[0] || bare[0] || '', all: ordered };
+  }
+
+  function renderChips(codes, best, chipsWrapId, boxId, hintId, onPick){
+    var box = $(boxId);
+    var chipsWrap = $(chipsWrapId);
+    var noHint = $(hintId);
+    chipsWrap.innerHTML = '';
+    if(!codes.length){
+      box.hidden = true;
+      noHint.hidden = false;
+      return;
+    }
+    noHint.hidden = true;
+    box.hidden = false;
+    codes.slice(0,4).forEach(function(code){
+      var chip = document.createElement('span');
+      chip.className = 'code-chip' + (code===best ? ' selected' : '');
+      chip.textContent = code;
+      chip.addEventListener('click', function(){
+        Array.prototype.forEach.call(chipsWrap.children, function(c){ c.classList.remove('selected'); });
+        chip.classList.add('selected');
+        onPick(code);
+      });
+      chipsWrap.appendChild(chip);
+    });
+  }
+
+  $('reclamoText').addEventListener('input', function(){
+    var text = this.value;
+    // If she pasted the whole email (with "Enviado el:" header) instead of
+    // just the body, pull out the real body and the receipt date from it.
+    var useText = text, autoDate = null;
+    try{
+      var blocksHere = parseMailboxText(text);
+      if(blocksHere.length === 1 && blocksHere[0].body){
+        useText = blocksHere[0].body;
+        if(blocksHere[0].dt) autoDate = blocksHere[0].dt;
+      }
+    }catch(e){}
+    $('f_descripcion').value = useText;
+    if(autoDate){ $('f_fecharecibo').value = isoFromDate(autoDate); }
+    var res = detectCodes(text);
+    selectedCode = res.best;
+    renderChips(res.all, res.best, 'codeChips', 'detectBox', 'noCodeHint', function(code){
+      selectedCode = code;
+      if(!$('f_idservicio').value.trim()) $('f_idservicio').value = code;
+      updateCaseBadge();
+    });
+    if(res.best && !$('f_idservicio').value.trim()){
+      $('f_idservicio').value = res.best;
+    }
+    updateCaseBadge();
+    updateOutput();
+    checkDuplicado($('f_idservicio').value.trim(), 'Notificación App', function(r){ renderDupInto($('dupWarnSingle'), r); });
+  });
+
+  $('copyCodeBtn').addEventListener('click', function(){
+    copyText(selectedCode, this);
+  });
+
+  // ---- Step 1 (Ticket): combine Asunto + Descripción, detect IdServicio ----
+  function refreshTicketDetection(){
+    var asunto = $('t_asunto').value;
+    var desc = $('t_descripcion').value;
+    var combined = [asunto, desc].filter(function(s){ return s && s.trim(); }).join('\n');
+    $('ft_descripcion').value = combined;
+    var res = detectCodes(combined);
+    selectedCodeT = res.best;
+    renderChips(res.all, res.best, 'codeChipsT', 'detectBoxT', 'noCodeHintT', function(code){
+      selectedCodeT = code;
+      if(!$('ft_idservicio').value.trim()) $('ft_idservicio').value = code;
+      updateCaseBadge();
+    });
+    if(res.best && !$('ft_idservicio').value.trim()){
+      $('ft_idservicio').value = res.best;
+    }
+    updateCaseBadge();
+    updateOutputT();
+    checkDuplicado($('ft_idservicio').value.trim(), 'Ticket', function(r){ renderDupInto($('dupWarnTicket'), r); });
+  }
+  $('t_asunto').addEventListener('input', refreshTicketDetection);
+  $('t_descripcion').addEventListener('input', refreshTicketDetection);
+  $('t_numticket').addEventListener('input', function(){
+    $('ft_numticket_out').value = this.value.trim();
+    updateOutputT();
+  });
+  $('t_fechacreacion').addEventListener('input', function(){
+    if(this.value) $('ft_fecharecibo').value = this.value;
+    updateOutputT();
+  });
+
+  $('copyCodeBtnT').addEventListener('click', function(){
+    copyText(selectedCodeT, this);
+  });
+
+  // ---- Step 1 (Ticket): paste the whole row from the Cereza table ----
+  $('t_pasteRow').addEventListener('input', function(){
+    var raw = this.value;
+    var parsed = parseTicketRow(raw);
+    var statusEl = $('t_pasteStatus');
+    if(!parsed.rows.length){ statusEl.textContent = ''; return; }
+    if(parsed.rows.length > 1){
+      $('loteTicketText').value = raw;
+      statusEl.textContent = 'Detecté ' + parsed.rows.length + ' filas — cambié al modo "Tickets (lote)" para procesarlas juntas.';
+      setActiveMode('ticketlote');
+      $('analizarLoteTicketBtn').click();
+      return;
+    }
+    statusEl.textContent = '';
+    var r = parsed.rows[0];
+    if(r.numero){ $('t_numticket').value = r.numero; $('ft_numticket_out').value = r.numero; }
+    var iso = ticketFechaToISO(r.fecha);
+    if(iso){ $('t_fechacreacion').value = iso; $('ft_fecharecibo').value = iso; }
+    if(r.asunto) $('t_asunto').value = r.asunto;
+    if(r.descripcion) $('t_descripcion').value = r.descripcion;
+    refreshTicketDetection();
+  });
+
+  // ---- Step 2 (Un caso): parse normalizador paste ----
+  $('normPaste').addEventListener('input', function(){
+    var raw = this.value;
+    if(!raw.trim()) return;
+    var parts = raw.split('\t');
+    if(parts.length < 6){
+      parts = raw.split(/\r?\n/).filter(function(x){ return x.trim() !== ''; });
+    }
+    parts = parts.map(function(p){ return p.trim(); });
+    COLS12.forEach(function(id, i){
+      if(parts[i] !== undefined && parts[i] !== ''){
+        $(id).value = parts[i];
+      }
+    });
+    checkEmpresa('f_empresa','f_tipocli','empresaWarn');
+    updateCaseBadge();
+    updateOutput();
+  });
+
+  COLS12.forEach(function(id){
+    $(id).addEventListener('input', function(){
+      if(id==='f_empresa') checkEmpresa('f_empresa','f_tipocli','empresaWarn');
+      if(id==='f_idservicio'){
+        updateCaseBadge();
+        checkDuplicado(this.value.trim(), 'Notificación App', function(r){ renderDupInto($('dupWarnSingle'), r); });
+      }
+      updateOutput();
+    });
+  });
+
+  // ---- Step 2 (Ticket): parse normalizador paste ----
+  $('normPasteT').addEventListener('input', function(){
+    var raw = this.value;
+    if(!raw.trim()) return;
+    var parts = raw.split('\t');
+    if(parts.length < 6){
+      parts = raw.split(/\r?\n/).filter(function(x){ return x.trim() !== ''; });
+    }
+    parts = parts.map(function(p){ return p.trim(); });
+    COLS12T.forEach(function(id, i){
+      if(parts[i] !== undefined && parts[i] !== ''){
+        $(id).value = parts[i];
+      }
+    });
+    checkEmpresa('ft_empresa','ft_tipocli','empresaWarnT');
+    updateCaseBadge();
+    updateOutputT();
+  });
+
+  COLS12T.forEach(function(id){
+    $(id).addEventListener('input', function(){
+      if(id==='ft_empresa') checkEmpresa('ft_empresa','ft_tipocli','empresaWarnT');
+      if(id==='ft_idservicio'){
+        updateCaseBadge();
+        checkDuplicado(this.value.trim(), 'Ticket', function(r){ renderDupInto($('dupWarnTicket'), r); });
+      }
+      updateOutputT();
+    });
+  });
+
+  function checkEmpresa(empresaId, tipoId, warnId){
+    var val = $(empresaId).value.trim();
+    var tipo = $(tipoId).value.trim().toLowerCase();
+    var warn = $(warnId);
+    if(!val || tipo !== 'corporativo'){ warn.hidden = true; return; }
+    var match = EMPRESAS.some(function(e){ return e.toLowerCase() === val.toLowerCase(); });
+    warn.hidden = match;
+  }
+
+  // ---- Step 3 listeners ----
+  ['f_atendido','f_fecharecibo','f_descripcion','f_accion'].forEach(function(id){
+    $(id).addEventListener('input', updateOutput);
+  });
+  $('f_tipocli').addEventListener('input', function(){ checkEmpresa('f_empresa','f_tipocli','empresaWarn'); });
+
+  ['ft_atendido','ft_fecharecibo','ft_numticket_out','ft_descripcion','ft_accion'].forEach(function(id){
+    $(id).addEventListener('input', updateOutputT);
+  });
+  $('ft_tipocli').addEventListener('input', function(){ checkEmpresa('ft_empresa','ft_tipocli','empresaWarnT'); });
+
+  // ---- case badge ----
+  function updateCaseBadge(){
+    var badge = $('caseBadge');
+    var text = $('caseBadgeText');
+    var code = '';
+    if(activeMode === 'single'){ code = $('f_idservicio').value.trim() || selectedCode; }
+    else if(activeMode === 'ticket'){ code = $('ft_idservicio').value.trim() || selectedCodeT; }
+    if(code){
+      badge.classList.add('active');
+      text.innerHTML = 'Servicio <b>'+escapeHtml(code)+'</b>';
+    } else {
+      badge.classList.remove('active');
+      text.textContent = 'Sin caso activo';
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  // ---- build final row ----
+  // Excel's clipboard TSV convention: a field that itself contains a tab, a
+  // newline or a quote must be wrapped in double quotes (internal quotes
+  // doubled), otherwise Excel reads each embedded newline as a new row and
+  // shreds the paste across many rows/columns instead of one cell.
+  function tsvField(v){
+    v = (v==null ? '' : String(v)).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    if(/[\t\n"]/.test(v)){
+      return '"' + v.replace(/"/g, '""') + '"';
+    }
+    return v;
+  }
+
+  // Shared 33-column row assembler (used by "Un caso", "Lote" and "Ticket").
+  // "N° Tickets" sits between Canal de comunicación and Fecha de la incidencia
+  // in the Data table — blank for Notificación App, filled for Ticket.
+  function assembleRow(f){
+    var row = [
+      f.atendido || '',            // 1 Atendido por
+      f.fechaRecibo || '',         // 2 Fecha en que recibo la incidencia (dd/mm/aaaa)
+      f.canal || 'Notificación App', // 3 Canal de comunicación
+      f.numTicket || '',           // 4 N° Tickets
+      f.fecha || '',                // 5 Fecha de la incidencia
+      f.unidad || '',                // 6 Unidad de Negocio
+      f.hora || '',                  // 7 Hora del Servicio
+      f.modo || '',                  // 8 Modo de Reserva
+      f.tipopet || '',               // 9 Tipo de Petición
+      f.idservicio || '',            // 10 IdServicio
+      f.tipocli || '',               // 11 Tipo Cliente
+      f.usuario || '',               // 12 Nombre del usuario afectado
+      f.empresa || '',               // 13 Nombre de la empresa afectada
+      f.flota || '',                 // 14 Flota
+      f.movil || '',                 // 15 N° Móvil
+      f.conductor || '',             // 16 Nombre del Conductor
+      f.descripcion || '',           // 17 Descripción inicial
+      '', '', '', '', '', '', '',    // 18-24 (Calidad)
+      '',                             // 25 Acción correctiva Conductor/Operación
+      f.accion || '',                 // 26 Acción correctiva de cara al Cliente
+      '', '', '', '', '', '', ''      // 27-33 (comercial/cierre/formulas)
+    ];
+    return row.map(tsvField).join('\t');
+  }
+
+  function updateOutput(){
+    var vals = {};
+    COLS12.forEach(function(id){ vals[id] = $(id).value.trim(); });
+    $('outputRow').value = assembleRow({
+      canal: 'Notificación App',
+      atendido: $('f_atendido').value.trim(),
+      fechaRecibo: isoToDMY($('f_fecharecibo').value),
+      fecha: vals.f_fecha, unidad: vals.f_unidad, hora: vals.f_hora, modo: vals.f_modo,
+      tipopet: vals.f_tipopet, idservicio: vals.f_idservicio, tipocli: vals.f_tipocli,
+      usuario: vals.f_usuario, empresa: vals.f_empresa, flota: vals.f_flota,
+      movil: vals.f_movil, conductor: vals.f_conductor,
+      descripcion: $('f_descripcion').value.trim(),
+      accion: $('f_accion').value.trim()
+    });
+  }
+
+  function updateOutputT(){
+    var vals = {};
+    COLS12T.forEach(function(id){ vals[id] = $(id).value.trim(); });
+    $('outputRowT').value = assembleRow({
+      canal: 'Ticket',
+      numTicket: $('ft_numticket_out').value.trim(),
+      atendido: $('ft_atendido').value.trim(),
+      fechaRecibo: isoToDMY($('ft_fecharecibo').value),
+      fecha: vals.ft_fecha, unidad: vals.ft_unidad, hora: vals.ft_hora, modo: vals.ft_modo,
+      tipopet: vals.ft_tipopet, idservicio: vals.ft_idservicio, tipocli: vals.ft_tipocli,
+      usuario: vals.ft_usuario, empresa: vals.ft_empresa, flota: vals.ft_flota,
+      movil: vals.ft_movil, conductor: vals.ft_conductor,
+      descripcion: $('ft_descripcion').value.trim(),
+      accion: $('ft_accion').value.trim()
+    });
+  }
+
+  // ---- copy helpers ----
+  function copyText(text, btnEl){
+    if(!text) return;
+    var done = function(ok){
+      if(!ok) return;
+      if(btnEl === $('copyRowBtn')){
+        var tag = $('copiedTag');
+        tag.classList.add('show');
+        setTimeout(function(){ tag.classList.remove('show'); }, 1400);
+      }
+      if(btnEl === $('copyRowBtnT')){
+        var tagT = $('copiedTagT');
+        tagT.classList.add('show');
+        setTimeout(function(){ tagT.classList.remove('show'); }, 1400);
+      }
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+  function fallbackCopy(text, done){
+    try{
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      done(ok);
+    }catch(e){ done(false); }
+  }
+
+  $('copyRowBtn').addEventListener('click', function(){
+    var text = $('outputRow').value;
+    if(!text.trim()){ return; }
+    copyText(text, this);
+    registrarEnBase($('f_idservicio').value.trim(), 'Notificación App', {
+      fecha: isoToDMY($('f_fecharecibo').value),
+      atendido: $('f_atendido').value.trim()
+    });
+  });
+
+  $('copyRowBtnT').addEventListener('click', function(){
+    var text = $('outputRowT').value;
+    if(!text.trim()){ return; }
+    copyText(text, this);
+    registrarEnBase($('ft_idservicio').value.trim(), 'Ticket', {
+      ticket: $('ft_numticket_out').value.trim(),
+      fecha: isoToDMY($('ft_fecharecibo').value),
+      atendido: $('ft_atendido').value.trim()
+    });
+  });
+
+  // ---- reset ----
+  $('resetBtn').addEventListener('click', function(){
+    $('reclamoText').value = '';
+    $('normPaste').value = '';
+    COLS12.forEach(function(id){ $(id).value = ''; });
+    $('f_descripcion').value = '';
+    $('f_accion').value = '';
+    $('f_fecharecibo').value = todayISO();
+    $('outputRow').value = '';
+    $('detectBox').hidden = true;
+    $('noCodeHint').hidden = true;
+    $('empresaWarn').hidden = true;
+    $('dupWarnSingle').hidden = true;
+    selectedCode = '';
+    updateCaseBadge();
+    $('reclamoText').focus();
+  });
+
+  $('resetBtnT').addEventListener('click', function(){
+    $('t_pasteRow').value = '';
+    $('t_pasteStatus').textContent = '';
+    $('t_numticket').value = '';
+    $('t_asunto').value = '';
+    $('t_descripcion').value = '';
+    $('t_fechacreacion').value = todayISO();
+    $('normPasteT').value = '';
+    COLS12T.forEach(function(id){ $(id).value = ''; });
+    $('ft_descripcion').value = '';
+    $('ft_accion').value = '';
+    $('ft_numticket_out').value = '';
+    $('ft_fecharecibo').value = todayISO();
+    $('outputRowT').value = '';
+    $('detectBoxT').hidden = true;
+    $('noCodeHintT').hidden = true;
+    $('empresaWarnT').hidden = true;
+    $('dupWarnTicket').hidden = true;
+    selectedCodeT = '';
+    updateCaseBadge();
+    $('t_numticket').focus();
+  });
+
+  updateCaseBadge();
+  refreshDupStatus();
+})();
+</script>
+
+</body></html>
